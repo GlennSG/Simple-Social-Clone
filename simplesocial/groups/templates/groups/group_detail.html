@@ -1,0 +1,30 @@
+{% extends "groups/group_base.html" %}
+{% block pregroup %}
+  <div class="container">
+  <!-- calls model "Group"-->
+  <h1>{{group.name}}</h1>
+  <h2>Member Count: {{group.members.count}}</h2>
+  <div class="content">
+    {% if user in group.members.all %}
+      <!-- can insert an icon in the link instead of using "Leave Group" (import favicon) -->
+      <a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-lg btn-fill btn-warning">Leave Group</a>
+    {% else %}
+      <a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-lg btn-fill btn-warning">Join Group</a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block group_content %}
+  <div class="col-md-8">
+    {% if group.posts.count == 0 %}
+      <h2>No posts in this group yet!</h2>
+    {% else %}
+      {% for post in group.posts.all %}
+        <!-- include has similar function as extends except it occurs in the middle of html instead of beginning -->
+        <!-- used for injecting html content -->
+        {% include "posts/_post.html" %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
